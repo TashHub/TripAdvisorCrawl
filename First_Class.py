@@ -4,7 +4,7 @@ from time import time
 from lxml import html, etree
 import requests, re
 import os, sys
-import unicodecsv as csv
+#import unicodecsv as csv
 import argparse
 
 
@@ -153,13 +153,24 @@ if __name__ == '__main__':
         data = parse(locality, checkin_date, checkout_date, sort)
         print
         "Writing to output file tripadvisor_data.csv"
-        with open('C:/Users/tash/Desktop/tripadvisor_data.csv', 'wb')as csvfile:
-            fieldnames = ['hotel_name', 'url', 'locality', 'reviews', 'tripadvisor_rating', 'checkIn', 'checkOut',
+        #csvfile = open("C:/Users/tash/Desktop/tripadvisor_data.csv", "wb")
+        #with open('C:/Users/tash/Desktop/tripadvisor_data.csv', 'w')as csvfile:
+
+        fieldnames = ['hotel_name', 'url', 'locality', 'reviews', 'tripadvisor_rating', 'checkIn', 'checkOut',
                           'price_per_night', 'booking_provider', 'no_of_deals', 'hotel_features']
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-            writer.writeheader()
-            for row in data:
-                writer.writerow(row)
+        #writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        #writer.writeheader()
+        print("Hellooooooooooooo")
+
+        if not data:
+            print("List empty")
+
+        for row in data:
+            print("Hellooooooooooooo" + row)
+            #writer.writerow(row)
+
+            #csvfile.close()
+        print("Hellooooooooooooo")
     # checking whether the entered date is already passed
     elif today > datetime.strptime(checkIn, "%Y/%m/%d") or today > datetime.strptime(checkOut, "%Y/%m/%d"):
         print
@@ -168,3 +179,4 @@ if __name__ == '__main__':
     elif datetime.strptime(checkIn, "%Y/%m/%d") > datetime.strptime(checkOut, "%Y/%m/%d"):
         print
         "Invalid Checkin date: CheckIn date must be less than checkOut date"
+
