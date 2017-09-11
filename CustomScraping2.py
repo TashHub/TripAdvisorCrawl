@@ -32,3 +32,4 @@ for hotel in containers:
     hotel_name = hotel.a.text
     hotel_link = hotel.a.get('href')
     print("https://www.tripadvisor.com" + hotel_link)
+
