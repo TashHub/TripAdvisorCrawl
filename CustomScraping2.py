@@ -43,7 +43,7 @@ while my_url is not None:
 
         print(hotel_full_link)
         # Storing html page in page_html
-        hotel_html = hotelClient.read()
+        hotel_html = hotelClient.read()part
         hotelClient.close()
         # call soup function
         # html parser
