@@ -2,34 +2,69 @@ import bs4
 from urllib.request import urlopen as uReq
 from bs4 import BeautifulSoup as soup
 
-# Assigning website url to variable
+# Start LOOP
 my_url = "https://www.tripadvisor.com/Hotels-g293816-Mauritius-Hotels.html"
 
-# my_url = "https://www.newegg.com/Video-Cards-Video-Devices/Category/ID-38?Tpk=graphic%20card"
+while my_url is not None:
+    print(my_url)
+    # Assigning website url to variable
+    # my_url = "https://www.tripadvisor.com/Hotels-g293816-Mauritius-Hotels.html"
 
-# Opening up connection and grabbing that web page; download it
-uClient = uReq(my_url)
+    # my_url = "https://www.newegg.com/Video-Cards-Video-Devices/Category/ID-38?Tpk=graphic%20card"
 
-# Storing html page in page_html
-page_html = uClient.read()
+    # Opening up connection and grabbing that web page; download it
+    uClient = uReq(my_url)
 
-uClient.close()
+    # Storing html page in page_html
+    page_html = uClient.read()
 
-# call soup function
+    uClient.close()
 
-# html parser
-page_soup = soup(page_html, "html.parser")
+    # call soup function
 
-print (page_soup.h1)
+    # html parser
+    page_soup = soup(page_html, "html.parser")
 
-# Grabs each hotel listed
-containers = page_soup.find_all("div", {"class": "listing_title"})
+    # print(page_soup.h1)
 
-# check number of hotels retrieved
-print(len(containers))
+    # Grabs each hotel listed
+    containers = page_soup.find_all("div", {"class": "listing_title"})
 
-for hotel in containers:
-    hotel_name = hotel.a.text
-    hotel_link = hotel.a.get('href')
-    print("https://www.tripadvisor.com" + hotel_link)
+    # check number of hotels retrieved
+    print(len(containers))
+
+    for hotel in containers:
+        hotel_name = hotel.a.text
+        hotel_link = hotel.a.get('href')
+        hotel_full_link = ("https://www.tripadvisor.com" + hotel_link)
+
+        # Go through each hotel to get reviews
+        hotelClient = uReq(hotel_full_link)
+
+        print(hotel_full_link)
+        # Storing html page in page_html
+        hotel_html = hotelClient.read()
+        hotelClient.close()
+        # call soup function
+        # html parser
+        hotel_soup = soup(hotel_html, "html.parser")
+        reviews = hotel_soup.find(attrs={"class": "reviews_header_count block_title"})
+        reviews_count = reviews.text
+
+        review_eg = hotel_soup.find(attrs={"class": "partial_entry"})
+        print(review_eg.text)
+        # print(hotel_full_link)
+
+
+
+    # get next link
+    next_button = page_soup.find(attrs={"class": "nav next taLnk ui_button primary"})
+    if next_button is not None:
+        next_button_link = (next_button.get('href'))
+
+    print(next_button_link)
+
+    my_url = "https://www.tripadvisor.com" + next_button_link
+
+    # End LOOP
 
