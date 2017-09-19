@@ -2,19 +2,20 @@ import bs4
 from urllib.request import urlopen as uReq
 from bs4 import BeautifulSoup as soup
 
-hotels_array = [[]]
+hotels_array = [['','']]
+
 filename = "hotels.csv"
 f = open(filename, "w")
 
 headers = "Hotels, Hotel_link\n"
 
-f .write(headers)
+f.write(headers)
 
 # Start LOOP
 my_url = "https://www.tripadvisor.com/Hotels-g293816-Mauritius-Hotels.html"
 
 while my_url is not None:
-    print(my_url)
+    # print(my_url)
     # Assigning website url to variable
     # my_url = "https://www.tripadvisor.com/Hotels-g293816-Mauritius-Hotels.html"
 
@@ -38,44 +39,16 @@ while my_url is not None:
     # Grabs each hotel listed
     containers = page_soup.find_all("div", {"class": "listing_title"})
 
-    # check number of hotels retrieved
-    print(len(containers))
-
     # Going through each hotel
     for hotel in containers:
         hotel_name = hotel.a.text
         hotel_link = hotel.a.get('href')
         hotel_full_link = ("https://www.tripadvisor.com" + hotel_link)
+        hotels_array.append([hotel_name , hotel_full_link])
+        f.write(hotel_name + "," + hotel_full_link + "\n")
 
-        # Go through each hotel to get reviews
-        hotelClient = uReq(hotel_full_link)
-
-        print(hotel_full_link)
-        # Storing hotel page in hotel_html
-        hotel_html = hotelClient.read()
-        hotelClient.close()
-        # call soup function
-        # html parser
-        hotel_soup = soup(hotel_html, "html.parser")
-
-        comment_link = hotel_soup.find_all("div", {"class": "quote isNew"})
-
-        for comment in comment_link:
-            comment_link_container = comment.a.get('href')
-            print(comment_link_container)
-
-
-
-        # Finding review count by class tag
-        reviews = hotel_soup.find(attrs={"class": "reviews_header_count block_title"})
-        reviews_count = reviews.text
-
-        reviews_container = hotel_soup.find_all(attrs={"class": "prw_rup prw_reviews_text_summary_hsx"})
-
-        # for review in reviews_container:
-        print(len(reviews_container))
-        # print(hotel_full_link)
-
+    # check number of hotels retrieved
+    print(len(containers))
 
 
     # get next link
@@ -83,9 +56,18 @@ while my_url is not None:
     if next_button is not None:
         next_button_link = (next_button.get('href'))
 
-    print(next_button_link)
+    # print(next_button_link)
 
-    my_url = "https://www.tripadvisor.com" + next_button_link
+    new_url = "https://www.tripadvisor.com" + next_button_link
+
+    if new_url == my_url:
+        break
+    else:
+        my_url = "https://www.tripadvisor.com" + next_button_link
 
     # End LOOP
+
+for i in hotels_array:
+    print(i)
+f.close()
 
