@@ -1,68 +1,85 @@
 from urllib.request import urlopen as uReq
 import requests
+import re
 
 from bs4 import BeautifulSoup as soup
+import CommentScrap
 
-comments_link_array = [['','']]
-offset = 0
-status = 0
 
-filename = "hotels.csv"
-f = open(filename, "w")
+def main(hotels_array):
+    print("Now getting hotel array from OnlyHotelScrap with length " + str(len(hotels_array)))
 
-headers = "Person, Hotel_link\n"
+    # Start LOOP
 
-f.write(headers)
+    for hotel in hotels_array:
 
-# Start LOOP
-ini_url = "https://www.tripadvisor.com/Hotel_Review-g298342-d2554952-Reviews-Maritim_Crystals_Beach_Hotel_Mauritius-Belle_Mare.html"
+        comments_link_array = [['', '']]
+        offset = 0
+        status = 0
 
-my_url = "https://www.tripadvisor.com/Hotel_Review-g298342-d2554952-Reviews-Maritim_Crystals_Beach_Hotel_Mauritius-Belle_Mare.html"
+        name = hotel[0]
+        name.replace(" ", "")
+        print()
+        my_url = hotel[1]
 
-while my_url is not None:
-    print(my_url)
-    uClient = uReq(my_url)
+        index = re.search(r'\b(Reviews)\b', my_url)
+        first = my_url[0:index.end() + 1]
+        second = my_url[index.end() + 1:len(my_url)]
 
-    # check if there is redirection
-    if(requests.get(my_url, allow_redirects=True).history):
-        status = 1
-        print("BROKE!!!!!!!!!!!!!!!!")
-        break
+        new_url = my_url
+        while new_url is not None:
+            print(new_url)
+            uClient = uReq(new_url)
 
-    # Storing html page in page_html
-    hotel_page_html = uClient.read()
+            # check if there is redirection
+            if(requests.get(new_url, allow_redirects=True).history):
+                status = 1
+                print("BROKE!!!!!!!!!!!!!!!!")
+                break
 
-    uClient.close()
+            # Storing html page in page_html
+            hotel_page_html = uClient.read()
 
-    # call soup function
+            uClient.close()
 
-    # html parser
-    hotel_page_soup = soup(hotel_page_html, "html.parser")
+            # call soup function
 
-    # print(page_soup.h1)
+            # html parser
+            hotel_page_soup = soup(hotel_page_html, "html.parser")
 
-    # Grabs each hotel listed
-    comments_containers = hotel_page_soup.find_all("div", {"class": "quote"})
+            # print(page_soup.h1)
 
-    for comment in comments_containers:
-        comment_link = comment.a.get('href')
-        comment_title = comment.a.get_text()
-        comment_full_link = ("https://www.tripadvisor.com" + comment_link)
+            # Grabs each comment links listed
+            comments_containers = hotel_page_soup.find_all("div", {"class": "quote"})
 
-        comments_link_array.append([comment_title , comment_full_link])
-        print(comment_title)
-        # f.write(hotel_name + "," + hotel_full_link + "\n")
+            for comment in comments_containers:
+                comment_link = comment.a.get('href')
+                comment_title = comment.a.get_text()
+                comment_full_link = ("https://www.tripadvisor.com" + comment_link)
 
-    if status is not 1:
-        next_button = hotel_page_soup.find(attrs={"class": "nav next taLnk "})
-        if next_button is not None:
-            offset += 5
-            print(offset)
-            new_url = "https://www.tripadvisor.com/Hotel_Review-g298342-d2554952-Reviews-or" + str(offset) +"-Maritim_Crystals_Beach_Hotel_Mauritius-Belle_Mare.html"
-    else:
-        print("BROKE")
-        break
+                comments_link_array.append([comment_title, comment_full_link])
+                # print(comment_title)
+                # f.write(hotel_name + "," + hotel_full_link + "\n")
 
-    my_url = new_url
+            if status is not 1:
+                next_button = hotel_page_soup.find(attrs={"class": "nav next taLnk "})
+                if next_button is not None:
+                    offset += 5
+                    print(offset)
+                    # index = re.search(r'\b(Reviews)\b', my_url)
+                    # first = my_url[0:index.end() + 1]
+                    # second = my_url[index.end() + 1:len(my_url)]
+                    new_url = first + "or" + str(offset) + "-" + second
+            else:
+                print("BROKE")
+                break
 
-    # End LOOP
+        my_url = new_url
+
+        del comments_link_array[0]
+        print("Number of comments for " + name + " is " + str(len(comments_link_array)))
+        CommentScrap.main(comments_link_array, name)
+
+            # End LOOP
+
+    return comments_link_array

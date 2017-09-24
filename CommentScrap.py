@@ -3,25 +3,42 @@ import requests
 
 from bs4 import BeautifulSoup as soup
 
-comment_url = "https://www.tripadvisor.com/ShowUserReviews-g298342-d2554952-r237556936-Maritim_Crystals_Beach_Hotel_Mauritius-Belle_Mare.html#CHECK_RATES_CONT"
 
-uClient = uReq(comment_url)
+def main(comments_link_array, name):
 
-# Storing html page in page_html
-comment_html = uClient.read()
+    print("Creating file with hotel name: " + name)
+    filename = name + ".csv"
+    f = open(filename, "w", encoding="utf-8")
 
-uClient.close()
+    headers = "Comment Title, Comment\n"
 
-# call soup function
+    f.write(headers)
+    # comment_url = "https://www.tripadvisor.com/ShowUserReviews-g298342-d2554952-r237556936-Maritim_Crystals_Beach_Hotel_Mauritius-Belle_Mare.html#CHECK_RATES_CONT"
 
-# html parser
-comment_soup = soup(comment_html, "html.parser")
-# print(page_soup.h1)
-# Grabs each hotel listed
+    for comment_url in comments_link_array:
+        uClient = uReq(comment_url[1])
 
-title = comment_soup.find("span", {"class": "noQuotes"})
-comment = comment_soup.find("p",{"class": "partial_entry"})
+        # Storing html page in page_html
+        comment_html = uClient.read()
 
+        uClient.close()
 
-print(title.text)
-print(comment.text)
+        # call soup function
+
+        # html parser
+        comment_soup = soup(comment_html, "html.parser")
+        # print(page_soup.h1)
+        # Grabs each hotel listed
+
+        title = comment_soup.find("span", {"class": "noQuotes"})
+        comment = comment_soup.find("p", {"class": "partial_entry"})
+
+        cmm = comment.text.replace(",", "|")
+
+        f.write(title.text + "," + cmm + "\n")
+
+        # print(title.text)
+        # print(comment.text)
+
+    # print("Closing file with hotel name: " + name)
+    f.close()
