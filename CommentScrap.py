@@ -33,6 +33,7 @@ def main(comments_link_array, name):
         title = comment_soup.find("span", {"class": "noQuotes"})
         comment = comment_soup.find("p", {"class": "partial_entry"})
 
+        tle = title.text.replace(",", "|")
         cmm = comment.text.replace(",", "|")
 
         f.write(title.text + "," + cmm + "\n")
