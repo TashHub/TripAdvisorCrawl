@@ -36,7 +36,7 @@ def main(comments_link_array, name):
         tle = title.text.replace(",", "|")
         cmm = comment.text.replace(",", "|")
 
-        f.write(title.text + "," + cmm + "\n")
+        f.write(tle + "," + cmm + "\n")
 
         # print(title.text)
         # print(comment.text)
