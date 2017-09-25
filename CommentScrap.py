@@ -7,7 +7,8 @@ from bs4 import BeautifulSoup as soup
 def main(comments_link_array, name):
 
     print("Creating file with hotel name: " + name)
-    filename = name + ".csv"
+    nm = name.replace("*","")
+    filename = nm + ".csv"
     f = open(filename, "w", encoding="utf-8")
 
     headers = "Comment Title, Comment\n"

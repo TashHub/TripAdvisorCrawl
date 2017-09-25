@@ -15,16 +15,39 @@
 # print(first)
 # print(second)
 
+#
+# array = [['','']]
+#
+# array.append(["Le Meridien", "https://fsdfsdfsdfsdf"])
+# array.append(["Le Meridien", "https://sdfsdfsd"])
+# array.append(["Le Meridien", "https://fsdfsdf"])
+#
+# del array[0]
+# for i in array:
+#
+#     print(i[1])
+#     # if(i[1]is not ''):
+#     #     print(i[1])
 
-array = [['','']]
+from urllib.request import urlopen as uReq
+import requests
+import re
 
-array.append(["Le Meridien", "https://fsdfsdfsdfsdf"])
-array.append(["Le Meridien", "https://sdfsdfsd"])
-array.append(["Le Meridien", "https://fsdfsdf"])
+from bs4 import BeautifulSoup as soup
+import CommentScrap
 
-del array[0]
-for i in array:
+# new_url = "https://www.tripadvisor.com/Hotel_Review-g298342-d2554952-Reviews-or490-Maritim_Crystals_Beach_Hotel_Mauritius-Belle_Mare.html"
+# uClient = uReq(new_url)
+#
+# print(uClient.geturl())
+#
+# if(new_url is not uClient.geturl()):
+#     print("REDIRECTED")
+# # check if there is redirection
+# print(requests.get(new_url, allow_redirects=True).history)
 
-    print(i[1])
-    # if(i[1]is not ''):
-    #     print(i[1])
+string = "lux*"
+print(string)
+
+st = string.replace("*", "")
+print(st)

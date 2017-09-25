@@ -32,7 +32,8 @@ def main(hotels_array):
             uClient = uReq(new_url)
 
             # check if there is redirection
-            if(requests.get(new_url, allow_redirects=True).history):
+            #if(requests.get(new_url, allow_redirects=True).history):
+            if(new_url is not uClient.geturl()):
                 status = 1
                 print("BROKE!!!!!!!!!!!!!!!!")
                 break
