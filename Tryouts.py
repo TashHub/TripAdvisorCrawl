@@ -30,24 +30,30 @@
 #     #     print(i[1])
 
 from urllib.request import urlopen as uReq
+from urllib.error import URLError, HTTPError
 import requests
 import re
 
 from bs4 import BeautifulSoup as soup
 import CommentScrap
 
-# new_url = "https://www.tripadvisor.com/Hotel_Review-g298342-d2554952-Reviews-or490-Maritim_Crystals_Beach_Hotel_Mauritius-Belle_Mare.html"
-# uClient = uReq(new_url)
-#
-# print(uClient.geturl())
-#
-# if(new_url is not uClient.geturl()):
-#     print("REDIRECTED")
-# # check if there is redirection
-# print(requests.get(new_url, allow_redirects=True).history)
+new_url = "https://www.tripadvisor.com/Hotel_Review-g298343-d585517-Reviews-or95-Gold_Beach_Resort-Flic_En_Flac.html"
+try:
+    uClient = uReq(new_url)
+except URLError as u:
+    print("URL error: " + u.reason)
+except HTTPError as e:
+    print("HTTP error:" + e.code)
 
-string = "lux*"
-print(string)
+print(uClient.geturl())
 
-st = string.replace("*", "")
-print(st)
+if(new_url is not uClient.geturl()):
+    print("REDIRECTED")
+# check if there is redirection
+print(requests.get(new_url, allow_redirects=True).history)
+
+# string = "lux*"
+# print(string)
+#
+# st = string.replace("*", "")
+# print(st)
