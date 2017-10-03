@@ -31,7 +31,7 @@ def main(hotels_array):
         while new_url is not None:
             print(new_url)
             try:
-                uClient = uReq(new_url)
+                uClient = uReq(new_url, timeout=100)
 
                 # check if there is redirection
                 #if(requests.get(new_url, allow_redirects=True).history):
@@ -65,25 +65,26 @@ def main(hotels_array):
                     # f.write(hotel_name + "," + hotel_full_link + "\n")
 
                 if status is not 1:
-                    next_button = hotel_page_soup.find(attrs={"class": "nav next taLnk "})
-                    if next_button is not None:
-                        offset += 5
-                        print(offset)
-                        # index = re.search(r'\b(Reviews)\b', my_url)
-                        # first = my_url[0:index.end() + 1]
-                        # second = my_url[index.end() + 1:len(my_url)]
-                        new_url = first + "or" + str(offset) + "-" + second
-                    else:
-                        print("No NEXT Button found")
+                    # next_button = hotel_page_soup.find(attrs={"class": "nav next taLnk "})
+                    # if next_button is not None:
+                    offset += 5
+                    print(offset)
+                    # index = re.search(r'\b(Reviews)\b', my_url)
+                    # first = my_url[0:index.end() + 1]
+                    # second = my_url[index.end() + 1:len(my_url)]
+                    new_url = first + "or" + str(offset) + "-" + second
+                    # else:
+                    #     print("No NEXT Button found")
+                    #     break
                 else:
                     print("BROKE")
                     break
             except URLError as u:
-                print("comment link URL error: " + u.reason)
+                print("comment link URL error: " + str(u.reason))
 
             except HTTPError as e:
-                print("comment link HTTP error:" + e.code)
-            except e:
+                print("comment link HTTP error:" + str(e.code))
+            except f:
                 print("Timeout !")
                 continue
         my_url = new_url

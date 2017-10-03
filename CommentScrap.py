@@ -19,7 +19,7 @@ def main(comments_link_array, name):
 
     for comment_url in comments_link_array:
         try:
-            uClient = uReq(comment_url[1], data=None, timeout=10)
+            uClient = uReq(comment_url[1], data=None, timeout=100)
 
             # Storing html page in page_html
             comment_html = uClient.read()
@@ -49,7 +49,7 @@ def main(comments_link_array, name):
 
         except HTTPError as e:
             print("comment HTTP error:" + e.code)
-        except e:
+        except f:
             print("Timeout !")
             continue
 
