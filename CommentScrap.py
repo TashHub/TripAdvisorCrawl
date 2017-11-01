@@ -35,11 +35,32 @@ def main(comments_link_array, name):
 
             title = comment_soup.find("span", {"class": "noQuotes"})
             comment = comment_soup.find("p", {"class": "partial_entry"})
+            location = comment_soup.find("span", {"class": "expand_inline userLocation"})
+            date = comment_soup.find("span", {"class": "ratingDate relativeDate"})
+            mob = comment_soup.find("span", {"class": "ui_icon mobile-phone"})
 
             tle = title.text.replace(",", "|")
             cmm = comment.text.replace(",", "|")
+            if location:
+                loc = location.text.replace(",", "|")
+            dte = date.attrs['title']
 
-            f.write(tle + "," + cmm + "\n")
+            date_splitted = dte.split()
+            month = date_splitted[0]
+            day = date_splitted[1].replace(",", "")
+            year = date_splitted[2]
+
+            months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+            month_index = months.index(month) + 1
+
+
+            date_formatted = day + "-" + str(month_index) + "-" + year
+            if mob:
+                mobile = "Yes"
+            else:
+                mobile = "No"
+
+            f.write(tle + "," + cmm + "," + loc + "," + ""+date_formatted+"" + "," + mobile + "\n")
 
             # print(title.text)
             # print(comment.text)
