@@ -39,6 +39,23 @@ def main(comments_link_array, name):
             date = comment_soup.find("span", {"class": "ratingDate relativeDate"})
             mob = comment_soup.find("span", {"class": "ui_icon mobile-phone"})
 
+            # if comment_soup.find("span", {"class": "ui_bubble_rating bubble_10"}):
+            #     rating = 1
+            # if comment_soup.find("span", {"class": "ui_bubble_rating bubble_20"}):
+            #     rating = 2
+            # if comment_soup.find("span", {"class": "ui_bubble_rating bubble_30"}):
+            #     rating = 3
+            # if comment_soup.find("span", {"class": "ui_bubble_rating bubble_40"}):
+            #     rating = 4
+            # if comment_soup.find("span", {"class": "ui_bubble_rating bubble_50"}):
+            #     rating = 5
+            rating = comment_soup.find("div", {"class": "rating"})
+            rating_inside = rating.find('span')
+            span_inside = rating_inside.find('span')
+            rating_value = (span_inside.attrs['alt'][0])
+            #print(rating_value)
+
+
             tle = title.text.replace(",", "|")
             cmm = comment.text.replace(",", "|")
             if location:
@@ -60,7 +77,7 @@ def main(comments_link_array, name):
             else:
                 mobile = "No"
 
-            f.write(tle + "," + cmm + "," + loc + "," + ""+date_formatted+"" + "," + mobile + "\n")
+            f.write(tle + "," + cmm + "," + loc + "," + ""+date_formatted+"" + "," + mobile + "," + str(rating_value) +"\n")
 
             # print(title.text)
             # print(comment.text)
