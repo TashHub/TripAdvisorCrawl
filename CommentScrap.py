@@ -70,7 +70,6 @@ def main(comments_link_array, name):
             months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
             month_index = months.index(month) + 1
 
-
             date_formatted = day + "-" + str(month_index) + "-" + year
             if mob:
                 mobile = "Yes"
