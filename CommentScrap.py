@@ -1,6 +1,7 @@
 from urllib.request import urlopen as uReq
 from urllib.error import URLError, HTTPError
 import requests
+import socket
 
 from bs4 import BeautifulSoup as soup
 
@@ -87,8 +88,12 @@ def main(comments_link_array, name):
         except HTTPError as e:
             print("comment HTTP error:" + e.code)
         except f:
-            print("Timeout !")
+            print("Timeout in CommentScrap!")
             continue
+
+        except socket.timeout:
+            print("Timeout Exception caught")
+
 
     # print("Closing file with hotel name: " + name)
     f.close()

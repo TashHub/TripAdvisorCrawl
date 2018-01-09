@@ -2,16 +2,17 @@ from urllib.request import urlopen as uReq
 from urllib.error import URLError, HTTPError
 import requests
 import re
-
+import socket
 from bs4 import BeautifulSoup as soup
 import CommentScrap
+import random
 
 
 def main(hotels_array):
     print("Now getting hotel array from OnlyHotelScrap with length " + str(len(hotels_array)))
 
     # Start LOOP
-
+    random.shuffle(hotels_array)
     for hotel in hotels_array:
 
         comments_link_array = [['', '']]
@@ -84,8 +85,12 @@ def main(hotels_array):
 
             except HTTPError as e:
                 print("comment link HTTP error:" + str(e.code))
+
+            except socket.timeout:
+                print("Timeout Exception caught")
+
             except f:
-                print("Timeout !")
+                print("Timeout in OnlyCommentScrap!")
                 continue
         my_url = new_url
 
