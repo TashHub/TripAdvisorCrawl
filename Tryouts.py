@@ -61,22 +61,67 @@
 
 #Splitting string for date,month,year
 
-string = "January 17, 2017"
+# string = "January 17, 2017"
+#
+# splitted = string.split()
+# month = splitted[0]
+# day = splitted[1].replace(",", "")
+# year = splitted[2]
+#
+# months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November",
+#           "December"]
+# month_index = months.index(month) + 1
+# date_formatted = day + "-" + str(month_index) + "-" + year
+#
+# print(splitted)
+# print(day)
+# print(month)
+# print(month_index)
+# print(year)
+#
+# print(date_formatted)
 
-splitted = string.split()
-month = splitted[0]
-day = splitted[1].replace(",", "")
-year = splitted[2]
 
-months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November",
-          "December"]
-month_index = months.index(month) + 1
-date_formatted = day + "-" + str(month_index) + "-" + year
+from urllib.request import urlopen as uReq
+from urllib.error import URLError, HTTPError
+import requests
+import re
+import socket
+from bs4 import BeautifulSoup as soup
+import CommentScrap
+import random
 
-print(splitted)
-print(day)
-print(month)
-print(month_index)
-print(year)
+new_url = "https://www.tripadvisor.com/Hotel_Review-g488105-d568249-Reviews-Indian_Resort-Le_Morne.html"
+uClient = uReq(new_url, timeout=100)
 
-print(date_formatted)
+# check if there is redirection
+# if(requests.get(new_url, allow_redirects=True).history):
+
+
+# Storing html page in page_html
+hotel_page_html = uClient.read()
+
+uClient.close()
+
+# call soup function
+
+# html parser
+hotel_page_soup = soup(hotel_page_html, "html.parser")
+
+# print(page_soup.h1)
+
+# Grabs each comment links listed
+comments_containers = hotel_page_soup.find_all("div", {"class": "quote"})
+
+for comment in comments_containers:
+    print(len(comments_containers))
+    a = comment.find('a')
+    if a:
+        print("EXIST")
+        comment_link = comment.a.get('href')
+        comment_title = comment.a.get_text()
+        comment_full_link = ("https://www.tripadvisor.com" + comment_link)
+
+        # comments_link_array.append([comment_title, comment_full_link])
+        # print(comment_title)
+        # f.write(hotel_name + "," + hotel_full_link + "\n")

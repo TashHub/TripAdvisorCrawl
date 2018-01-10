@@ -57,13 +57,15 @@ def main(hotels_array):
                 comments_containers = hotel_page_soup.find_all("div", {"class": "quote"})
 
                 for comment in comments_containers:
-                    comment_link = comment.a.get('href')
-                    comment_title = comment.a.get_text()
-                    comment_full_link = ("https://www.tripadvisor.com" + comment_link)
+                    a = comment.find('a')  #check
+                    if a:
+                        comment_link = comment.a.get('href')
+                        comment_title = comment.a.get_text()
+                        comment_full_link = ("https://www.tripadvisor.com" + comment_link)
 
-                    comments_link_array.append([comment_title, comment_full_link])
-                    # print(comment_title)
-                    # f.write(hotel_name + "," + hotel_full_link + "\n")
+                        comments_link_array.append([comment_title, comment_full_link])
+                        # print(comment_title)
+                        # f.write(hotel_name + "," + hotel_full_link + "\n")
 
                 if status is not 1:
                     # next_button = hotel_page_soup.find(attrs={"class": "nav next taLnk "})

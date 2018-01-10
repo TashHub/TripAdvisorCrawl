@@ -20,7 +20,7 @@ def main(comments_link_array, name):
 
     for comment_url in comments_link_array:
         try:
-            uClient = uReq(comment_url[1], data=None, timeout=500)
+            uClient = uReq(comment_url[1], data=None, timeout=None)
 
             # Storing html page in page_html
             comment_html = uClient.read()
